@@ -25,6 +25,13 @@ task "db:migrate" do
   end
 end
 
+desc "migrate the database (options: VERSION=x, VERBOSE=false, SCOPE=blog)."
+task "db:migrate_down" do
+  ActiveRecord::Migrator.migrations_paths << File.dirname(__FILE__) + 'db/migrate'
+  ActiveRecord::Migration.verbose = ENV["VERBOSE"] ? ENV["VERBOSE"] == "true" : true
+  ActiveRecord::Migrator.down(ActiveRecord::Migrator.migrations_paths, 20150927154238)
+end
+
 desc "populate the test database with sample data"
 task "db:populate" do
   StudentsImporter.import
