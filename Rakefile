@@ -1,7 +1,9 @@
 require 'rake'
 require 'rspec/core/rake_task'
+require 'faker'
 require_relative 'db/config'
 require_relative 'lib/students_importer'
+require_relative 'app/models/teacher.rb'
 
 
 desc "create the database"
@@ -37,3 +39,13 @@ desc "Run the specs"
 RSpec::Core::RakeTask.new(:specs)
 
 task :default  => :specs
+
+desc "Create 9 random teachers"
+task "db:seed" do
+  9.times do
+    Teacher.create :first_name => Faker::Name.first_name,
+                   :last_name  => Faker::Name.last_name,
+                   :email      => Faker::Internet.email,
+                   :phone      => Faker::PhoneNumber.phone_number
+  end
+end
